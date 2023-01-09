@@ -1,0 +1,18 @@
+# folders
+node_modules
+.git
+.husky
+dist
+docs
+coverage
+QA
+assets
+tests
+
+# files
+.**ignore
+*.md
+*.json
+*.config.js
+yarn.lock
+*.spec.ts

@@ -1,0 +1,3 @@
+{
+    "*": ["__RUNNER__ run fix:format", "__RUNNER__ run fix:lint"]
+}

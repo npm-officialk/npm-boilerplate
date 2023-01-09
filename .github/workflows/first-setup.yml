@@ -1,0 +1,186 @@
+name: "1❗️ First time setup ❗️1"
+run-name: Setting up repo and project
+
+on:
+    workflow_dispatch:
+        inputs:
+            GH_TOKEN:
+                description: "The custom github token you generated"
+                required: true
+                type: string
+            NPM_TOKEN:
+                description: "The npm token you generated"
+                required: true
+                type: string
+            SNYK_TOKEN:
+                description: "The snyk token you generated"
+                required: false
+                type: string
+            EMAIL:
+                description: "Email where you want the users to contact you"
+                required: true
+                type: string
+            NPM_USERNAME:
+                description: "Yours/Organizations npm username where the package gets published"
+                required: true
+                type: string
+            PACKAGE_NAME:
+                description: "The name of the package you want to publish(defaults to repo name)"
+                required: false
+                type: string
+            HOMEPAGE:
+                description: "The website where the documentation is uploaded to"
+                required: false
+                type: string
+            DESCRIPTION:
+                description: "The description of the package"
+                required: false
+                type: string
+            KEYWORDS:
+                description: "The keywords that describe the package(separate keywords by spaces)"
+                required: false
+                type: string
+                default: typescript jsdoc eslint jest npm-package prettier commitizen semantic-release snyk husky commitlint github-actions lint-staged
+            RUNNER:
+                description: "The package manager you prefer using"
+                required: false
+                type: choice
+                options:
+                    - "yarn"
+                    - "npm"
+                default: yarn
+
+jobs:
+    project:
+        name: "⚙️ Setup project"
+        runs-on: "ubuntu-latest"
+        steps:
+            - name: "checkout project"
+              uses: actions/checkout@v3
+              with:
+                  fetch-depth: 0
+                  token: ${{ inputs.GH_TOKEN }}
+            - run: git pull
+
+            - uses: actions/setup-node@v3.6.0
+            - run: |
+                  npm i replace-in-files-cli keywords -g
+                  replace-in-files --string "__GITHUB_USER__" --replacement "${{ github.repository_owner }}"  "./**/**" "./.**" "./.**/**"
+                  replace-in-files --string "__REPO__" --replacement "${GITHUB_REPOSITORY#*/}" "./**/**" "./.**" "./.**/**"
+                  replace-in-files --string "__RUNNER__" --replacement "${{ inputs.RUNNER }}" "./**/**" "./.**" "./.**/**"
+                  if [ "${{ inputs.PACKAGE_NAME }}" == "" ]; then
+                  replace-in-files --string "__PACKAGE_NAME__" --replacement "${GITHUB_REPOSITORY#*/}" "./**/**" "./.**" "./.**/**"
+                  else
+                  replace-in-files --string "__PACKAGE_NAME__" --replacement "${{ inputs.PACKAGE_NAME }}" "./**/**" "./.**" "./.**/**"
+                  fi
+                  replace-in-files --string "__EMAIL__" --replacement "${{ inputs.EMAIL }}" "./**/**" "./.**" "./.**/**"
+                  replace-in-files --string "__NPM_USERNAME__" --replacement "${{ inputs.NPM_USERNAME }}" "./**/**" "./.**" "./.**/**"
+                  replace-in-files --string "__HOMEPAGE__" --replacement "${{ inputs.HOMEPAGE }}" "./**/**" "./.**" "./.**/**"
+                  replace-in-files --string "__DESCRIPTION__" --replacement "${{ inputs.DESCRIPTION }}" "./**/**" "./.**" "./.**/**"
+                  keywords ${{ inputs.KEYWORDS }}
+                  git add .
+                  git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+                  git config --local user.name "github-actions[bot]"
+                  git commit -m "chore(setup): [skip ci] cleaning up project"
+                  git push
+
+    repository:
+        name: "📚 Setup repository"
+        runs-on: "ubuntu-latest"
+        needs: [project]
+        steps:
+            - name: "checkout project"
+              uses: actions/checkout@v3
+              with:
+                  token: ${{ inputs.GH_TOKEN }}
+                  fetch-depth: 0
+            - run: git pull
+
+            - name: "setup the repository description"
+              uses: zhengbangbo/update-repository-description@v1.0.0
+              with:
+                  repo-token: ${{ inputs.GH_TOKEN }}
+
+            - name: "setup the repository topics"
+              uses: nickderobertis/github-topic-syncer@alpha
+              with:
+                  topics: "${{ inputs.KEYWORDS }}"
+                  token: ${{ inputs.GH_TOKEN }}
+
+            - name: "update repository labels"
+              uses: r7kamura/github-label-sync-action@v0.1.0
+              with:
+                  allow_added_labels: false
+                  source_path: ./.github/labels.yml
+
+            - name: "setup github secret: Github access key"
+              uses: gliech/create-github-secret-action@v1.4.10
+              with:
+                  name: GH_TOKEN
+                  value: ${{ inputs.GH_TOKEN }}
+                  pa_token: ${{ inputs.GH_TOKEN }}
+            - name: "setup github secret: NPM access key"
+              uses: gliech/create-github-secret-action@v1.4.10
+              with:
+                  name: NPM_TOKEN
+                  value: ${{ inputs.NPM_TOKEN }}
+                  pa_token: ${{ inputs.GH_TOKEN }}
+            - name: "setup github secret: SNYK access key"
+              uses: gliech/create-github-secret-action@v1.4.10
+              with:
+                  name: SNYK_TOKEN
+                  value: ${{ inputs.SNYK_TOKEN }}
+                  pa_token: ${{ inputs.GH_TOKEN }}
+
+            - name: "create repository environments"
+              uses: thijsvtol/create-environments@main
+              with:
+                  token: ${{ inputs.GH_TOKEN }}
+                  repo: ${{ github.repository }}
+                  environments: development, production
+
+    cleanup:
+        name: "🧹 Cleanup the repository"
+        runs-on: "ubuntu-latest"
+        needs: [repository]
+        steps:
+            - name: "checkout project"
+              uses: actions/checkout@v3
+              with:
+                  token: ${{ inputs.GH_TOKEN }}
+                  fetch-depth: 0
+
+            - run: git pull
+            - name: "deleting unwanted files"
+              run: |
+                  sed -i 1,2d README.md
+                  rm TODO.md
+                  rm .github/workflows/first-setup.yml
+                  rm .github/labels.yml
+                  git add .
+                  git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+                  git config --local user.name "github-actions[bot]"
+                  git commit -m "chore(setup): [skip ci] cleaning project"
+                  git push
+
+            - run: git pull
+            - name: "prettify project"
+              uses: creyD/prettier_action@v4.3
+              with:
+                  commit_message: "chore(formatting): [skip ci] updating format to be consistent"
+                  prettier_options: "--ignore-unknown --config ./.prettierrc --write ./"
+                  github_token: ${{ inputs.GH_TOKEN }}
+
+            - run: git pull
+            - name: "cleaning up commits"
+              run: |
+                  git reset --soft $(git rev-list --max-parents=0 HEAD)
+                  git add .
+                  git commit -a --no-verify --amend -m "chore(setup): Intial commit [skip ci]"
+                  git push --force
+
+            - run: git pull
+            - name: "create the development branch"
+              run: |
+                  git checkout -b development main
+                  git push -u origin development --force

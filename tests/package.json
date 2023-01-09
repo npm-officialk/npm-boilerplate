@@ -1,0 +1,20 @@
+{
+	"name": "tests",
+	"version": "1.0.0",
+	"description": "use this folder to run jest testing on the package level [DO NOT PUBLISH THIS PACKAGE]",
+	"private": "true",
+	"scripts": {
+		"test": "jest",
+		"start": "echo \"Put a command here\""
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"jest": "^29.4.3",
+		"ts-jest": "^29.0.5"
+	},
+	"devDependencies":{
+		// any extra dependencies you want to install
+	}
+}
