@@ -1,0 +1,50 @@
+{
+    "name": "template-npm-package",
+    "version": "0.0.0-development",
+    "description": "A template repository to get quickly setup to create new NPM template-npm-packages.",
+    "author": "officialk<karthik@officialk.dev>(https://officialk.dev/)",
+    "license": "ISC",
+    "keywords": [],
+    "homepage": "npm.officialk.dev/template-npm-package",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/officialk/template-npm-package/"
+    },
+    "bugs": {
+        "url": "https://github.com/officialk/template-npm-package/issues/new"
+    },
+    "main": "dist/index.js",
+    "types": "dist/types/index.d.ts",
+    "exports": {
+        ".": {
+            "require": {
+                "types": "./dist/types/index.d.ts",
+                "default": "./dist/index.js"
+            }
+        }
+    },
+    "files": [
+        "dist/**/*"
+    ],
+    "bin": "./dist/index.js",
+    "scripts": {
+        "//dev": "echo 'commands used in development'",
+        "start": "node ./dist/index.ts",
+        "start:dev": "nodemon ./src/index.ts",
+        "//builds": "echo 'update the codebase to either format,lint or build'",
+        "build": "yarn build:dist && yarn build:minify",
+        "build:dist": "rimraf dist && tsc",
+        "build:minify": "minify-all-js ./dist -j -M -m",
+        "//checks": "echo 'run checks to ensure QA and working'"
+    },
+    "dependencies": {},
+    "devDependencies": {
+        "rimraf": "^3.0.2",
+        "dotenv": "^16.0.3",
+        "ts-node": "^10.9.1",
+        "nodemon": "^2.0.20",
+        "typescript": "^4.9.4",
+        "minify-all-js": "^0.1.9"
+    },
+    "resolutions": {}
+}
