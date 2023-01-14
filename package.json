@@ -34,13 +34,19 @@
         "//builds": "echo 'update the codebase to either format,lint or build'",
         "format": "prettier --ignore-unknown --write ./",
         "lint": "eslint --fix ./src/**/*",
+        "fortify": "snyk fix",
+        "fix:audit": "npm audit fix --force",
         "build": "yarn build:dist && yarn build:minify",
-        "build:dist": "rimraf dist && tsc && yarn build:minify",
+        "build:dist": "rimraf dist && tsc",
         "build:minify": "minify-all-js ./dist -j -M -m",
         "//checks": "echo 'run checks to ensure QA and working'",
         "check:format": "prettier --check ./",
         "check:quality": "eslint --output-file QA/index.html --format html",
-        "check:test": "jest --passWithNoTests"
+        "check:test": "jest --passWithNoTests",
+        "check:vunerability": "snyk code test --severity-level=low --all-projects ./src",
+        "check:license": "snyk test",
+        "check:audit": "yarn audit --groups 'dependencies' && snyk monitor",
+        "check:safety": "yarn check:audit && yarn check:vunerability"
     },
     "dependencies": {},
     "devDependencies": {
