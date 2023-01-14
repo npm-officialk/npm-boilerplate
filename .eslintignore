@@ -11,4 +11,6 @@ assets
 # files
 .**ignore
 *.json
+*.config.js
 yarn.lock
+*.spec.ts
