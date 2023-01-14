@@ -1,0 +1,43 @@
+{
+    "plugins": ["node_modules/better-docs/typescript"],
+    "recurseDepth": 10,
+    "source": {
+        "include": ["./src"],
+        "includePattern": "\\.(jsx|js|ts|tsx)$"
+    },
+    "sourceType": "module",
+    "tags": {
+        "allowUnknownTags": true,
+        "dictionaries": ["jsdoc", "closure"]
+    },
+    "templates": {
+        "cleverLinks": false,
+        "monospaceLinks": false,
+        "search": true,
+        "better-docs": {
+            "name": "Package Documentation",
+            "title": "package",
+            "hideGenerator": true,
+            "navLinks": [
+                {
+                    "label": "Example",
+                    "href": "https://npm.officialk.dev/package"
+                },
+                {
+                    "label": "Github",
+                    "href": "https://github.com/officialk/package"
+                },
+                {
+                    "label": "Other packages",
+                    "href": "https://www.npmjs.com/~officialk"
+                }
+            ]
+        }
+    },
+    "opts": {
+        "template": "node_modules/better-docs",
+        "destination": "./docs/",
+        "readme": "README.md",
+        "recurse": true
+    }
+}
