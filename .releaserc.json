@@ -1,0 +1,92 @@
+{
+    "repository": "git@github.com:officialk/npm-template.git",
+    "tagFormat": "v.${version}",
+    "branches": ["main", "master"],
+    "plugins": [
+        [
+            "@semantic-release/commit-analyzer",
+            {
+                "releaseRules": [
+                    {
+                        "type": "feat",
+                        "release": "minor"
+                    },
+                    {
+                        "type": "fix",
+                        "release": "patch"
+                    },
+                    {
+                        "type": "docs",
+                        "release": false
+                    },
+                    {
+                        "type": "perf",
+                        "release": "minor"
+                    },
+                    {
+                        "type": "build",
+                        "release": false
+                    },
+                    {
+                        "type": "ci",
+                        "release": false
+                    },
+                    {
+                        "type": "chore",
+                        "release": false
+                    },
+                    {
+                        "type": "revert",
+                        "release": false
+                    },
+                    {
+                        "type": "refactor",
+                        "release": "major"
+                    },
+                    {
+                        "type": "style",
+                        "release": "patch"
+                    },
+                    {
+                        "type": "test",
+                        "release": false
+                    }
+                ]
+            }
+        ],
+        [
+            "@semantic-release/release-notes-generator",
+            {
+                "config": "@commitlint/config-conventional",
+                "linkCompare": true
+            }
+        ],
+        [
+            "@semantic-release/changelog",
+            {
+                "changelogFile": ".github/CHANGELOG.md",
+                "changelogTitle": "# Changelog\n\nAll notable changes to this project will be documented in this file. See\n[Conventional Commits](https://conventionalcommits.org) for commit guidelines."
+            }
+        ],
+        [
+            "@semantic-release/npm",
+            {
+                "npmPublish": true,
+                "tarballDir": "pack"
+            }
+        ],
+        [
+            "@semantic-release/github",
+            {
+                "assets": "pack/*.tgz"
+            }
+        ],
+        [
+            "@semantic-release/git",
+            {
+                "assets": ["dist/**/*", "package.json", "package-lock.json", "README.md"],
+                "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+            }
+        ]
+    ]
+}

@@ -2,16 +2,24 @@
     "name": "template-npm-package",
     "version": "0.0.0-development",
     "description": "A template repository to get quickly setup to create new NPM template-npm-packages.",
-    "author": "officialk<karthik@officialk.dev>(https://officialk.dev/)",
+    "author": {
+        "name": "officialk",
+        "email": "karthik@officialk.dev"
+    },
     "license": "ISC",
     "keywords": [],
     "homepage": "npm.officialk.dev/template-npm-package",
     "repository": {
         "type": "git",
-        "url": "https://github.com/officialk/template-npm-package/"
+        "url": "https://github.com/officialk/npm-template"
     },
     "bugs": {
-        "url": "https://github.com/officialk/template-npm-package/issues/new"
+        "url": "https://github.com/officialk/npm-template/issues/new"
+    },
+    "private": true,
+    "publishConfig": {
+        "registry": "https://registry.npmjs.org/",
+        "tag": "latest"
     },
     "main": "dist/index.js",
     "types": "dist/types/index.d.ts",
@@ -33,11 +41,12 @@
         "start:dev": "nodemon ./src/index.ts",
         "start:docs": "yarn build:docs && yarn start:server",
         "start:server": "http-server docs -d false -o /index.html --no-dotfiles -e html --cors -i false -p 9876",
-        "//builds": "echo 'update the codebase to either format,lint or build'",
+        "//fixes": "echo 'commands to fix the problems before checking for them'",
         "format": "prettier --ignore-unknown --write ./",
         "lint": "eslint --fix ./src/**/*",
         "fortify": "snyk fix",
-        "fix:audit": "npm audit fix --force",
+        "fix:audit": "yarn audit fix --groups 'dependencies' --force",
+        "//builds": "echo 'update the codebase to either format,lint or build'",
         "build": "yarn build:dist && yarn build:docs && yarn build:minify",
         "build:dist": "rimraf dist && tsc",
         "build:docs": "rimraf docs && jsdoc -c jsdoc.json",
@@ -46,14 +55,22 @@
         "check:format": "prettier --check ./",
         "check:quality": "eslint --output-file QA/index.html --format html",
         "check:test": "jest --passWithNoTests",
+        "check:coverage": "jest --passWithNoTests --coverage",
         "check:vunerability": "snyk code test --severity-level=low --all-projects ./src",
         "check:license": "snyk test",
         "check:audit": "yarn audit --groups 'dependencies' && snyk monitor",
-        "check:safety": "yarn check:audit && yarn check:vunerability"
+        "check:safety": "yarn check:audit && yarn check:vunerability",
+        "//misc": "echo 'Other commands used in the backend of development'",
+        "prepare": "husky install && git config --local core.hooksPath .husky",
+        "commit": "git-cz",
+        "lint-staged": "lint-staged -c .lintstagedrc",
+        "prerelease": "npm i --package-lock-only",
+        "release": "semantic-release --extends ./.releaserc.json"
     },
     "dependencies": {},
     "devDependencies": {
         "jest": "^29.3.1",
+        "husky": "^8.0.3",
         "jsdoc": "^4.0.0",
         "rimraf": "^3.0.2",
         "dotenv": "^16.0.3",
@@ -62,20 +79,33 @@
         "taffydb": "^2.7.3",
         "nodemon": "^2.0.20",
         "prettier": "2.8.1",
+        "commitizen": "^4.2.6",
         "typescript": "^4.9.4",
         "better-docs": "^2.7.2",
         "@types/jest": "^29.2.5",
+        "lint-staged": "^13.1.0",
         "http-server": "^14.1.1",
         "minify-all-js": "^0.1.9",
+        "@commitlint/cli": "^17.4.2",
+        "semantic-release": "^18.0.1",
         "eslint-config-node": "^4.1.0",
         "eslint-plugin-import": "^2.26.0",
+        "semantic-release-cli": "^5.4.4",
+        "@semantic-release/git": "^10.0.1",
+        "@semantic-release/npm": "^8.0.3",
         "eslint-config-prettier": "^8.6.0",
         "eslint-plugin-prettier": "^4.2.1",
         "jsdoc-plugin-typescript": "^2.2.0",
+        "@semantic-release/github": "^8.0.7",
+        "cz-conventional-changelog": "^3.3.0",
         "@typescript-eslint/parser": "^5.48.1",
         "eslint-config-airbnb-base": "^15.0.0",
+        "@semantic-release/changelog": "^6.0.2",
         "eslint-config-airbnb-typescript": "^17.0.0",
-        "@typescript-eslint/eslint-plugin": "^5.48.1"
+        "@commitlint/config-conventional": "^17.4.2",
+        "@typescript-eslint/eslint-plugin": "^5.48.1",
+        "@semantic-release/commit-analyzer": "^9.0.2",
+        "@semantic-release/release-notes-generator": "^10.0.3"
     },
     "resolutions": {}
 }
