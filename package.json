@@ -11,10 +11,15 @@
     "homepage": "npm.officialk.dev/template-npm-package",
     "repository": {
         "type": "git",
-        "url": "https://github.com/officialk/template-npm-package/"
+        "url": "https://github.com/officialk/npm-template"
     },
     "bugs": {
-        "url": "https://github.com/officialk/template-npm-package/issues/new"
+        "url": "https://github.com/officialk/npm-template/issues/new"
+    },
+    "private": false,
+    "publishConfig": {
+        "registry": "https://registry.npmjs.org/",
+        "tag": "latest"
     },
     "main": "dist/index.js",
     "types": "dist/types/index.d.ts",
@@ -58,7 +63,9 @@
         "//misc": "echo 'Other commands used in the backend of development'",
         "prepare": "husky install && git config --local core.hooksPath .husky",
         "commit": "git-cz",
-        "lint-staged": "lint-staged -c .lintstagedrc"
+        "lint-staged": "lint-staged -c .lintstagedrc",
+        "prerelease": "npm i --package-lock-only",
+        "release": "semantic-release"
     },
     "dependencies": {},
     "devDependencies": {
@@ -80,17 +87,25 @@
         "http-server": "^14.1.1",
         "minify-all-js": "^0.1.9",
         "@commitlint/cli": "^17.4.2",
+        "semantic-release": "^18.0.1",
         "eslint-config-node": "^4.1.0",
         "eslint-plugin-import": "^2.26.0",
+        "semantic-release-cli": "^5.4.4",
+        "@semantic-release/git": "^10.0.1",
+        "@semantic-release/npm": "^8.0.3",
         "eslint-config-prettier": "^8.6.0",
         "eslint-plugin-prettier": "^4.2.1",
         "jsdoc-plugin-typescript": "^2.2.0",
+        "@semantic-release/github": "^8.0.7",
         "cz-conventional-changelog": "^3.3.0",
         "@typescript-eslint/parser": "^5.48.1",
         "eslint-config-airbnb-base": "^15.0.0",
+        "@semantic-release/changelog": "^6.0.2",
         "eslint-config-airbnb-typescript": "^17.0.0",
         "@commitlint/config-conventional": "^17.4.2",
-        "@typescript-eslint/eslint-plugin": "^5.48.1"
+        "@typescript-eslint/eslint-plugin": "^5.48.1",
+        "@semantic-release/commit-analyzer": "^9.0.2",
+        "@semantic-release/release-notes-generator": "^10.0.3"
     },
     "resolutions": {}
 }
