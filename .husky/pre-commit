@@ -2,8 +2,7 @@
 . "$(dirname -- "$0")/_/husky.sh"
 
 # fix stuff
-npm run format
-npm run lint
+npm run lint-staged
 npm run fortify
 npm run fix:audit
 
