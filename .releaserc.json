@@ -1,10 +1,7 @@
 {
-    "repository": "https://github.com/officialk/npm-template",
+    "repository": "git@github.com:officialk/npm-template.git",
     "tagFormat": "v.${version}",
-    "branches": [
-        "main",
-        "master"
-    ],
+    "branches": ["main", "master"],
     "plugins": [
         [
             "@semantic-release/commit-analyzer",
@@ -87,12 +84,7 @@
         [
             "@semantic-release/git",
             {
-                "assets": [
-                    "dist/**/*",
-                    "package.json",
-                    "package-lock.json",
-                    "README.md"
-                ],
+                "assets": ["dist/**/*", "package.json", "package-lock.json", "README.md"],
                 "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
             }
         ]

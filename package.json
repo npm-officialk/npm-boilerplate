@@ -16,7 +16,7 @@
     "bugs": {
         "url": "https://github.com/officialk/npm-template/issues/new"
     },
-    "private": false,
+    "private": true,
     "publishConfig": {
         "registry": "https://registry.npmjs.org/",
         "tag": "latest"
@@ -65,7 +65,7 @@
         "commit": "git-cz",
         "lint-staged": "lint-staged -c .lintstagedrc",
         "prerelease": "npm i --package-lock-only",
-        "release": "semantic-release"
+        "release": "semantic-release --extends ./.releaserc.json"
     },
     "dependencies": {},
     "devDependencies": {
