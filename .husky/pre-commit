@@ -1,0 +1,18 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# fix stuff
+npm run format
+npm run lint
+npm run fortify
+npm run fix:audit
+
+# check workings
+npm run check:quality
+npm run check:test
+npm run check:coverage
+npm run check:vunerability
+npm run check:license
+npm run check:audit
+npm run check:safety
+npm run build
