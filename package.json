@@ -37,7 +37,7 @@
     "bin": "./dist/index.js",
     "scripts": {
         "//dev": "echo 'commands used in development'",
-        "start": "node ./dist/index.ts",
+        "start": "yarn build:dist && node ./dist/index.js",
         "start:dev": "nodemon ./src/index.ts",
         "start:docs": "yarn build:docs && yarn start:server",
         "start:server": "http-server docs -d false -o /index.html --no-dotfiles -e html --cors -i false -p 9876",
@@ -76,6 +76,7 @@
         "dotenv": "^16.0.3",
         "eslint": "^8.29.0",
         "ts-node": "^10.9.1",
+        "ts-jest": "^29.0.5",
         "taffydb": "^2.7.3",
         "nodemon": "^2.0.20",
         "prettier": "2.8.1",
