@@ -13,4 +13,4 @@ assets
 *.json
 *.config.js
 yarn.lock
-"**/*.spec.ts"
+*.spec.ts

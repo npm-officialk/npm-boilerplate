@@ -20,4 +20,4 @@ todo.md
 yarn.lock
 README.md
 .env
-
+*.spec.*
