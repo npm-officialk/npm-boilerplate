@@ -78,9 +78,12 @@ typings/
 # Next.js build output
 .next
 
-# Nuxt.js build / generate output
+# builds / generated output
 .nuxt
 dist
+docs
+QA
+.vscode
 
 # Gatsby files
 .cache/
@@ -102,3 +105,7 @@ dist
 
 # TernJS port file
 .tern-port
+
+# snyk generate files
+.iac-data/*
+.dccache
