@@ -1,5 +1,5 @@
 {
-    "name": "template-npm-package",
+    "name": "@officialk/template-npm-package",
     "version": "0.0.0-development",
     "description": "A template repository to get quickly setup to create new NPM template-npm-packages.",
     "author": {
@@ -16,13 +16,13 @@
     "bugs": {
         "url": "https://github.com/officialk/npm-template/issues/new"
     },
-    "private": true,
+    "private": false,
     "publishConfig": {
         "registry": "https://registry.npmjs.org/",
         "tag": "latest"
     },
-    "main": "dist/index.js",
-    "types": "dist/types/index.d.ts",
+    "main": "./dist/index.js",
+    "types": "./dist/types/index.d.ts",
     "exports": {
         ".": {
             "require": {
@@ -37,19 +37,27 @@
     "bin": "./dist/index.js",
     "scripts": {
         "//dev": "echo 'commands used in development'",
-        "start": "yarn build:dist && node ./dist/index.js",
+        "prestart": "yarn build:dist",
+        "start": "node ./dist/index.js",
         "start:dev": "nodemon ./src/index.ts",
-        "start:docs": "yarn build:docs && yarn start:server",
-        "start:server": "http-server docs -d false -o /index.html --no-dotfiles -e html --cors -i false -p 9876",
+        "start:test": "concurrently --kill-others \"yarn check:coverage --watchAll\" \"yarn start:server -p 8765 ./coverage/lcov-report/\"",
+        "poststart:test": "rimraf coverage",
+        "prestart:docs": "yarn build:docs",
+        "start:docs": "yarn start:server -p 9876 ./docs",
+        "poststart:docs": "rimraf docs",
+        "start:server": "http-server -d false -o /index.html --no-dotfiles -e html --cors -i false",
         "//fixes": "echo 'commands to fix the problems before checking for them'",
-        "format": "prettier --ignore-unknown --write ./",
-        "lint": "eslint --fix ./src/**/*",
-        "fortify": "snyk fix",
+        "fix:format": "prettier --ignore-unknown --write ./",
+        "fix:lint": "eslint --fix ./src/**/*",
+        "fix:fortify": "snyk fix",
         "fix:audit": "yarn audit fix --groups 'dependencies' --force",
         "//builds": "echo 'update the codebase to either format,lint or build'",
-        "build": "yarn build:dist && yarn build:docs && yarn build:minify",
-        "build:dist": "rimraf dist && tsc",
-        "build:docs": "rimraf docs && jsdoc -c jsdoc.json",
+        "build": "yarn build:dist && yarn build:docs",
+        "postbuild": "yarn build:minify",
+        "prebuild:dist": "rimraf dist",
+        "build:dist": "tsc",
+        "prebuild:docs": "rimraf docs",
+        "build:docs": "jsdoc -c jsdoc.json",
         "build:minify": "minify-all-js ./dist -j -M -m",
         "//checks": "echo 'run checks to ensure QA and working'",
         "check:format": "prettier --check ./",
@@ -59,13 +67,16 @@
         "check:vunerability": "snyk code test --severity-level=low --all-projects ./src",
         "check:license": "snyk test",
         "check:audit": "yarn audit --groups 'dependencies' && snyk monitor",
-        "check:safety": "yarn check:audit && yarn check:vunerability",
+        "check:all": "yarn check:format && yarn check:qualit && yarn check:test && yarn check:coverage && yarn check:vunerability && yarn check:license && yarn check:audit",
         "//misc": "echo 'Other commands used in the backend of development'",
-        "prepare": "husky install && git config --local core.hooksPath .husky",
+        "prepare": "husky install",
+        "postprepare": "git config --local core.hooksPath .husky",
         "commit": "git-cz",
         "lint-staged": "lint-staged -c .lintstagedrc",
         "prerelease": "npm i --package-lock-only",
-        "release": "semantic-release --extends ./.releaserc.json"
+        "release": "semantic-release --extends ./.releaserc.json",
+        "prepack": "yarn build && npm i --package-lock-only",
+        "postpack": "rimraf package-lock.json"
     },
     "dependencies": {},
     "devDependencies": {
@@ -86,6 +97,7 @@
         "@types/jest": "^29.2.5",
         "lint-staged": "^13.1.0",
         "http-server": "^14.1.1",
+        "concurrently": "^7.6.0",
         "minify-all-js": "^0.1.9",
         "@commitlint/cli": "^17.4.2",
         "semantic-release": "^18.0.1",
