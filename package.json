@@ -66,17 +66,16 @@
         "check:coverage": "jest --passWithNoTests --coverage",
         "check:vunerability": "snyk code test --severity-level=low --all-projects ./src",
         "check:license": "snyk test",
-        "check:audit": "yarn audit --groups 'dependencies' && snyk monitor",
+        "check:audit": "yarn audit --groups 'dependencies'",
+        "post:check:audit": "snyk monitor",
         "check:all": "yarn check:format && yarn check:qualit && yarn check:test && yarn check:coverage && yarn check:vunerability && yarn check:license && yarn check:audit",
         "//misc": "echo 'Other commands used in the backend of development'",
+        "commit": "git-cz",
         "prepare": "husky install",
         "postprepare": "git config --local core.hooksPath .husky",
-        "commit": "git-cz",
         "lint-staged": "lint-staged -c .lintstagedrc",
-        "prerelease": "npm i --package-lock-only",
         "release": "semantic-release --extends ./.releaserc.json",
-        "prepack": "yarn build && npm i --package-lock-only",
-        "postpack": "rimraf package-lock.json"
+        "prepack": "yarn build"
     },
     "dependencies": {},
     "devDependencies": {
