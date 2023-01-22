@@ -1,0 +1,64 @@
+# types
+- name: "issue - security :lock:"
+  description: This is a security issue/vunerability
+  color: "#B60205"
+- name: "issue - bug :bug:"
+  description: Something isn't working
+  color: "#D93F0B"
+- name: "issue - feature :arrow_up:"
+  description: New feature or request
+  color: "#0E8A16"
+- name: good first issue
+  description: Good for newcomers
+  color: "#0052CC"
+- name: "issue - documentation :page_with_curl:"
+  description: Improvements or additions to documentation
+  color: "#0052CC"
+
+# statuses
+- name: "status - backlog :books:"
+  description: The issue is in the backlog and not going to be worked on right now
+  color: "#C5DEF5"
+- name: "status - in progress :hammer:"
+  description: Currently being worked on
+  color: "#0E8A16"
+- name: "status - in review :eyes:"
+  description: Currently waiting on passing the CI/CD pipeline and review.
+  color: "#5319E7"
+- name: "status - duplicate :busts_in_silhouette:"
+  description: This issue or pull request already exists
+  color: "#D4C5F9"
+- name: "status - invalid :no_good_man:"
+  description: The issue is incomplete or invalid
+  color: "#D93F0B"
+- name: "status - wontfix :stop_sign:"
+  description: This will not be worked on
+  color: "#D93F0B"
+- name: "status - blocked :no_entry_sign:"
+  description: The issue is blocked due to things not under the devs control
+  color: "#FBCA04"
+- name: "status - completed :white_check_mark:"
+  description: The work for the issue is completed and merged
+  color: "#FBCA04"
+
+# support
+- name: "support - help wanted :sos:"
+  description: Extra attention is needed
+  color: "#0052CC"
+- name: "support - question :question:"
+  description: Further information is requested
+  color: "#0052CC"
+
+# priorities
+- name: "priority - urgent :red_circle:"
+  description: This needs to be worked on urgently
+  color: "#B60205"
+- name: "priority - high :orange_circle:"
+  description: This is a high priority issue
+  color: "#D93F0B"
+- name: "priority - normal :yellow_circle:"
+  description: This is a normal priority issue
+  color: "#FBCA04"
+- name: "priority - low :white_circle:"
+  description: This is a low priority issue
+  color: "#0052CC"

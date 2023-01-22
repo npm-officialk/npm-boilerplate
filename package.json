@@ -68,14 +68,15 @@
         "check:license": "snyk test",
         "check:audit": "yarn audit --groups 'dependencies'",
         "post:check:audit": "snyk monitor",
-        "check:all": "yarn check:format && yarn check:qualit && yarn check:test && yarn check:coverage && yarn check:vunerability && yarn check:license && yarn check:audit",
+        "check:all": "yarn check:format && yarn check:quality && yarn check:test && yarn check:coverage && yarn check:vunerability && yarn check:license && yarn check:audit",
         "//misc": "echo 'Other commands used in the backend of development'",
         "commit": "git-cz",
         "prepare": "husky install",
         "postprepare": "git config --local core.hooksPath .husky",
         "lint-staged": "lint-staged -c .lintstagedrc",
         "release": "semantic-release --extends ./.releaserc.json",
-        "prepack": "yarn build"
+        "prepack": "yarn build",
+        "setup:labels": "github-label-sync -l ./github/labels.yml officialk/template-npm-package"
     },
     "dependencies": {},
     "devDependencies": {
@@ -100,6 +101,7 @@
         "minify-all-js": "^0.1.9",
         "@commitlint/cli": "^17.4.2",
         "semantic-release": "^18.0.1",
+        "github-label-sync": "^2.2.0",
         "eslint-config-node": "^4.1.0",
         "eslint-plugin-import": "^2.26.0",
         "semantic-release-cli": "^5.4.4",
