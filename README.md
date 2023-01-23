@@ -2,6 +2,9 @@
 
 This is a pre-configured template repository to help you quickly get started with developing npm/yarn packages
 
+[![Documentation site](https://img.shields.io/static/v1?style=for-the-badge&label=%20&message=documentation&color=blue&logo=readthedocs&logoColor=white)](https://npm.officialk.dev/package)
+[![Coverage info site](https://img.shields.io/static/v1?style=for-the-badge&label=%20&message=coverage&color=red&logo=jest&logoColor=white)](https://test.officialk.dev/package)
+
 **NPM**
 
 [![NPM version](https://img.shields.io/npm/v/@officialk/template-npm-package?style=for-the-badge)](https://npmjs.org/package/@officialk/template-npm-package)
