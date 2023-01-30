@@ -64,7 +64,7 @@
         "check:quality": "eslint --output-file QA/index.html --format html",
         "check:test": "jest --passWithNoTests",
         "check:coverage": "jest --passWithNoTests --coverage",
-        "check:vunerability": "snyk code test --severity-level=low --all-projects ./src",
+        "check:vunerability": "snyk code test --severity-threshold=low --all-projects ./src",
         "check:license": "snyk test",
         "check:audit": "yarn audit --groups 'dependencies'",
         "post:check:audit": "snyk monitor",
@@ -74,7 +74,7 @@
         "prepare": "husky install",
         "postprepare": "git config --local core.hooksPath .husky",
         "lint-staged": "lint-staged -c .lintstagedrc",
-        "release": "semantic-release --extends ./.releaserc.json",
+        "release": "semantic-release -e ./.releaserc.json",
         "prepack": "yarn build",
         "setup:labels": "github-label-sync -l ./github/labels.yml officialk/template-npm-package"
     },

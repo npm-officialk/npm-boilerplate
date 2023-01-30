@@ -1,0 +1,74 @@
+name: "🧱➛🎯 release outputs"
+
+on:
+    workflow_call:
+        inputs:
+            env:
+                type: string
+                description: "The environment to deploy to"
+                default: "development"
+            node:
+                type: string
+                description: "the version/s node needs to be set up with"
+                default: 16
+            os:
+                type: string
+                description: "the operating system/s the jobs need to be set up with"
+                default: ubuntu-latest
+
+jobs:
+    dist:
+        name: "publishing the package to npm"
+        runs-on: ${{ inputs.os }}
+        environment: ${{ inputs.env }}
+        steps:
+            - name: "get next release version"
+              run: npx semantic-release --dryRun | grep -oP 'Published release \K.*? ' | cat > .version
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+                  NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+                  GIT_CREDENTIALS: ${{ secrets.GIT_CREDENTIALS }}
+
+            - name: "create a development release"
+              if: inputs.env != 'production'
+              run: |
+                  npm set //registry.npmjs.org/:_authToken ${{ secrets.NPM_TOKEN }}
+                  export VERSION=$(cat .version)
+                  npm version $VERSION --git-tag-version false --preid dev
+                  npm version prerelease --git-tag-version false --preid dev
+                  npm publish
+
+            - name: "create a production release"
+              if: inputs.env == 'production'
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+                  NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+                  GIT_CREDENTIALS: ${{ secrets.GIT_CREDENTIALS }}
+              run: |
+                  npm set //registry.npmjs.org/:_authToken ${{ secrets.NPM_TOKEN }}
+                  yarn release
+
+    docs:
+        name: "uploading the docs folder to ${{ inputs.env }} server"
+        runs-on: ${{ inputs.os }}
+        environment: ${{ inputs.env }}
+        steps:
+            # delete
+            - uses: actions/checkout@v3
+              with:
+                  fetch-depth: 0
+
+            - uses: DerYeger/yarn-setup-action@master
+              with:
+                  node-version: ${{ inputs.node }}
+            - run: yarn build:docs
+            # till here
+
+            - uses: modern-dev/ftp-mirror@v2
+              with:
+                  server: ${{ secrets.FTP_SERVER }}
+                  user: ${{ secrets.FTP_USERNAME }}
+                  password: ${{ secrets.FTP_PASSWORD }}
+                  local_dir: "./docs"
+                  remote_dir: "${{ github.event.repository.name }}${{ vars.FOLDER_EXTENSION }}"
+                  delete: true

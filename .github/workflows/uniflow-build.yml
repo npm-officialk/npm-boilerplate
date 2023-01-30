@@ -1,0 +1,43 @@
+name: "🧱➛📦 build outputs"
+
+on:
+    workflow_call:
+        inputs:
+            node:
+                type: string
+                description: "the version/s node needs to be set up with"
+                default: 16
+            os:
+                type: string
+                description: "the operating system/s the jobs need to be set up with"
+                default: ubuntu-latest
+
+jobs:
+    # build code output in the dist folder
+    dist:
+        name: "building code output"
+        runs-on: ${{ inputs.os }}
+        steps:
+            - uses: DerYeger/yarn-setup-action@master
+              with:
+                  node-version: ${{ inputs.node }}
+            - run: yarn build:dist
+            - run: yarn build:minify
+            - uses: actions/upload-artifact@v3
+              with:
+                  name: "${{ github.workflow }}-${{ inputs.os }}_${{ inputs.node }}"
+                  path: ${{ github.workspace }}/dist
+
+    # build docs output in the docs folder
+    docs:
+        name: "building documentation output"
+        runs-on: ${{ inputs.os }}
+        steps:
+            - uses: DerYeger/yarn-setup-action@master
+              with:
+                  node-version: ${{ inputs.node }}
+            - run: yarn build:docs
+            - uses: actions/upload-artifact@v3
+              with:
+                  name: "${{ github.workflow }}-${{ inputs.os }}_${{ inputs.node }}"
+                  path: ${{ github.workspace }}/docs

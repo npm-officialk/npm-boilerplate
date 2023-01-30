@@ -1,0 +1,51 @@
+name: "🏗️🚀 Release to production"
+run-name: ${{ github.workflow }}-${{ github.ref_name }}
+
+on:
+    push:
+        branches:
+            - main
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref_name }}
+    cancel-in-progress: true
+
+jobs:
+    # setup the project and needed tools
+    setup:
+        name: "⚙️ setup project"
+        uses: ./.github/workflows/uniflow-setup.yml
+
+    # check static code quality and formatting
+    QA:
+        needs: [setup]
+        name: "🎨 check code quality"
+        uses: ./.github/workflows/uniflow-qa.yml
+
+    # check tests and coverage of code
+    tests:
+        needs: [QA]
+        name: "🧪 test code coverage"
+        uses: ./.github/workflows/uniflow-test.yml
+
+    # audit packages, library and code vunerabilites
+    audit:
+        needs: [tests]
+        name: "🔍 audit vunerabilities"
+        uses: ./.github/workflows/uniflow-audit.yml
+        secrets:
+            SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+    # build output files and folders
+    build:
+        needs: [audit]
+        name: "📦 build outputs"
+        uses: ./.github/workflows/uniflow-build.yml
+
+    # build output files and folders
+    deploy:
+        needs: [build]
+        name: "🎯 release outputs"
+        uses: ./.github/workflows/uniflow-deploy.yml
+        with:
+            env: production
